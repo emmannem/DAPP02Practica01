@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 public class ConexionDB {
 
     private static ConexionDB cx = null;
-    private CallableStatement cs = null;
     private Connection con = null;
 
     public static ConexionDB getInstance() {
@@ -47,5 +46,31 @@ public class ConexionDB {
 
     public Connection getConnection() {
         return con;
+    }
+
+    public void close() {
+        try {
+            if (con != null) {
+                con.close();
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public boolean execute(String sql) {
+        try {
+            Statement st = con.createStatement();
+            return st.execute(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+
+    }
+
+    public boolean execute(TransactionDB trans) {
+        return trans.execute(con);
     }
 }

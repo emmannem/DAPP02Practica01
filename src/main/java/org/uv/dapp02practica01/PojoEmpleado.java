@@ -4,15 +4,33 @@
  */
 package org.uv.dapp02practica01;
 
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
 /**
  *
  * @author LENOVO
  */
-public class PojoEmpleado {
+@Entity
+@Table(name = "empleado")
+public class PojoEmpleado implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+
+    @Column(name = "id")
     private int id;
+    @Column(name = "nombre")
     private String nombre;
+    @Column(name = "direccion")
     private String direccion;
+    @Column(name = "telefono")
     private String telefono;
 
     /**

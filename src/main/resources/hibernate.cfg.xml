@@ -5,7 +5,7 @@
 <hibernate-configuration>
     <session-factory>
         <property name = "connection.driver_class">org.postgresql.Driver</property>
-        <property name = "connection.url">jdbc:postgresql://localhost/venta</property>
+        <property name = "connection.url">jdbc:postgresql://localhost/ejemplo</property>
         <property name = "dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <property name = "connection.username">postgres</property>
         <property name = "connection.password">root</property>
@@ -14,7 +14,6 @@
         <property name = "show_sql">true</property>
         <property name = "format_sql">true</property>
         <property name = "hbm2ddl.auto">update</property>
-        <mapping class="org.uv.dapp02practica01.Venta"></mapping>
-        <mapping class="org.uv.dapp02practica01.DetalleVenta"></mapping>
+        <mapping class="org.uv.dapp02practica01.PojoEmpleado"></mapping>
     </session-factory>
 </hibernate-configuration>
