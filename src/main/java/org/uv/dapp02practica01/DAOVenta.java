@@ -22,7 +22,7 @@ public class DAOVenta implements IDAO<Venta> {
 
         Transaction tran = session.beginTransaction();
         for (DetalleVenta det : p.getDetalleVenta()) {
-            session.save(p);
+            session.save(det);
         }
 
         tran.commit();
