@@ -5,6 +5,7 @@
 package org.uv.dapp02practica01;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
@@ -33,8 +34,13 @@ public class Venta {
     @Column(name = "total")
     private double total;
 
-    @OneToMany(mappedBy = "venta")
+    //@OneToMany(mappedBy = "venta")
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleVenta> detalleVenta;
+
+    public Venta() {
+        detalleVenta = new ArrayList<>();
+    }
 
     /**
      * @return the detalleVenta
