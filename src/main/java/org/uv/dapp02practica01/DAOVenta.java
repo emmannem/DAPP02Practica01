@@ -51,6 +51,9 @@ public class DAOVenta implements IDAO<Venta> {
         try {
             tran = session.beginTransaction();
             session.update(p);
+            for (DetalleVenta det : p.getDetalleVenta()) {
+                session.update(det);
+            }
             tran.commit();
             System.out.println("Se actualizó la venta con el ID: " + p.getIdventa());
             return true;
@@ -61,11 +64,29 @@ public class DAOVenta implements IDAO<Venta> {
             Logger.getLogger(DAOVenta.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
+
     }
 
     @Override
     public boolean delete(Venta p) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        SessionFactory sf = HibernateUtil.getSessionFactory();
+        Session session = sf.getCurrentSession();
+        Transaction tran = null;
+        try {
+            tran = session.beginTransaction();
+            session.delete(p);
+            tran.commit();
+            System.out.println("Se eliminó la venta con el ID: " + p.getIdventa());
+            return true;
+        } catch (Exception ex) {
+            if (tran != null) {
+                tran.rollback();
+
+            }
+            Logger.getLogger(DAOVenta.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 
     @Override
@@ -76,20 +97,40 @@ public class DAOVenta implements IDAO<Venta> {
         Venta venta = null;
         try {
             tran = session.beginTransaction();
-            venta = session.get(Venta.class, id);
+            venta
+                    = session.get(Venta.class,
+                            id);
             tran.commit();
         } catch (Exception ex) {
             if (tran != null) {
                 tran.rollback();
+
             }
-            Logger.getLogger(DAOVenta.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DAOVenta.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return venta;
     }
 
     @Override
     public List<Venta> readAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        SessionFactory sf = HibernateUtil.getSessionFactory();
+        Session session = sf.getCurrentSession();
+        Transaction tran = null;
+        List<Venta> ventas = null;
+        try {
+            tran = session.beginTransaction();
+            ventas = session.createQuery("FROM Venta").getResultList();
+            tran.commit();
+        } catch (Exception ex) {
+            if (tran != null) {
+                tran.rollback();
+
+            }
+            Logger.getLogger(DAOVenta.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+        return ventas;
     }
 
 }

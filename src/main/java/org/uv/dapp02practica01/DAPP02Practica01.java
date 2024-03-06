@@ -47,13 +47,13 @@ public class DAPP02Practica01 {
                         buscarVenta();
                         break;
                     case 3:
-                        //verVentas()
+                        verVentas();
                         break;
                     case 4:
                         modificarVenta();
                         break;
                     case 5:
-                        //eliminarVenta()
+                        eliminarVenta();
                         break;
                     case 6:
                         salir = true;
@@ -127,6 +127,21 @@ public class DAPP02Practica01 {
             System.out.print("Ingrese el nuevo total de la venta: ");
             venta.setTotal(scanner.nextDouble());
 
+            // Solicitar al usuario si desea modificar los detalles de la venta
+            System.out.print("Desea modificar los detalles de la venta? (S/N): ");
+            String respuesta = scanner.next();
+            if (respuesta.equalsIgnoreCase("S")) {
+                // Modificar detalles de la venta
+                for (DetalleVenta detalle : venta.getDetalleVenta()) {
+                    System.out.println("Ingrese el nuevo nombre del producto: ");
+                    detalle.setProducto(scanner.next());
+                    System.out.println("Ingrese la nueva cantidad: ");
+                    detalle.setCantidad(scanner.nextDouble());
+                    System.out.println("Ingrese el nuevo precio: ");
+                    detalle.setPrecio(scanner.nextDouble());
+                }
+            }
+
             boolean resultado = dao.update(venta);
             if (resultado) {
                 System.out.println("La venta ha sido modificada con éxito.");
@@ -162,6 +177,51 @@ public class DAPP02Practica01 {
             }
         } else {
             System.out.println("Venta no encontrada.");
+        }
+    }
+
+    private static void eliminarVenta() {
+        System.out.println("ELIMINAR VENTA");
+        System.out.print("Ingrese el ID de la venta que desea eliminar: ");
+        int idVenta = scanner.nextInt();
+        Venta venta = dao.readByID(idVenta);
+        if (venta != null) {
+            boolean resultado = dao.delete(venta);
+            if (resultado) {
+                System.out.println("La venta ha sido eliminada con éxito.");
+            } else {
+                System.out.println("Error al eliminar la venta.");
+            }
+        } else {
+            System.out.println("No se encontró ninguna venta con ese ID.");
+        }
+    }
+
+    private static void verVentas() {
+        System.out.println("VER VENTAS");
+        List<Venta> ventas = dao.readAll();
+        if (ventas != null && !ventas.isEmpty()) {
+            for (Venta venta : ventas) {
+                System.out.println("ID: " + venta.getIdventa());
+                System.out.println("Cliente: " + venta.getCliente());
+                System.out.println("Fecha de Venta: " + venta.getFechaventa());
+                System.out.println("Total: " + venta.getTotal());
+
+                List<DetalleVenta> detalles = venta.getDetalleVenta();
+                if (detalles != null && !detalles.isEmpty()) {
+                    System.out.println("Detalle de Venta:");
+                    for (DetalleVenta detalle : detalles) {
+                        System.out.println("Producto: " + detalle.getProducto());
+                        System.out.println("Cantidad: " + detalle.getCantidad());
+                        System.out.println("Precio: " + detalle.getPrecio());
+                    }
+                } else {
+                    System.out.println("No hay detalles de venta para esta venta.");
+                }
+                System.out.println("--------------------------------------------");
+            }
+        } else {
+            System.out.println("No hay ventas registradas.");
         }
     }
 }
