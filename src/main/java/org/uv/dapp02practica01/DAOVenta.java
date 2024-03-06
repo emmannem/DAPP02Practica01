@@ -34,7 +34,9 @@ public class DAOVenta implements IDAO<Venta> {
             System.out.println("Se guardó la venta con el ID: " + p.getIdventa());
             return true;
         } catch (Exception ex) {
-            tran.rollback();
+            if (tran != null) {
+                tran.rollback();
+            }
             Logger.getLogger(DAOVenta.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
@@ -43,7 +45,22 @@ public class DAOVenta implements IDAO<Venta> {
 
     @Override
     public boolean update(Venta p) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        SessionFactory sf = HibernateUtil.getSessionFactory();
+        Session session = sf.getCurrentSession();
+        Transaction tran = null;
+        try {
+            tran = session.beginTransaction();
+            session.update(p);
+            tran.commit();
+            System.out.println("Se actualizó la venta con el ID: " + p.getIdventa());
+            return true;
+        } catch (Exception ex) {
+            if (tran != null) {
+                tran.rollback();
+            }
+            Logger.getLogger(DAOVenta.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 
     @Override
@@ -52,8 +69,22 @@ public class DAOVenta implements IDAO<Venta> {
     }
 
     @Override
-    public Venta readByID(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Venta readByID(long id) {
+        SessionFactory sf = HibernateUtil.getSessionFactory();
+        Session session = sf.getCurrentSession();
+        Transaction tran = null;
+        Venta venta = null;
+        try {
+            tran = session.beginTransaction();
+            venta = session.get(Venta.class, id);
+            tran.commit();
+        } catch (Exception ex) {
+            if (tran != null) {
+                tran.rollback();
+            }
+            Logger.getLogger(DAOVenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return venta;
     }
 
     @Override

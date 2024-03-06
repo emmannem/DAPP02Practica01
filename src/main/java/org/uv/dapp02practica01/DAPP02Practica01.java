@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,16 +41,16 @@ public class DAPP02Practica01 {
 
                 switch (opcion) {
                     case 1:
-                        crearVenta();
+                        guardarVenta();
                         break;
                     case 2:
-                        //buscarVenta()
+                        buscarVenta();
                         break;
                     case 3:
                         //verVentas()
                         break;
                     case 4:
-                        //modificarVenta()
+                        modificarVenta();
                         break;
                     case 5:
                         //eliminarVenta()
@@ -68,7 +69,7 @@ public class DAPP02Practica01 {
 
     }
 
-    private static void crearVenta() {
+    private static void guardarVenta() {
         Venta venta = new Venta();
         System.out.println("GUARDAR VENTA");
         System.out.print("Ingrese el nombre del cliente: ");
@@ -87,16 +88,13 @@ public class DAPP02Practica01 {
 
             System.out.println("AGREGAR DETALLE DE VENTA");
             System.out.print("Ingrese el nombre del producto: ");
-            String producto = scanner.next();
-            detalle.setProducto(producto);
+            detalle.setProducto(scanner.next());
 
             System.out.print("Ingrese la cantidad: ");
-            double cantidad = scanner.nextDouble();
-            detalle.setCantidad(cantidad);
+            detalle.setCantidad(scanner.nextDouble());
 
             System.out.print("Ingrese el precio: ");
-            double precio = scanner.nextDouble();
-            detalle.setPrecio(precio);
+            detalle.setPrecio(scanner.nextDouble());
 
             detalle.setVenta(venta);
             venta.getDetalleVenta().add(detalle);
@@ -111,5 +109,59 @@ public class DAPP02Practica01 {
             System.out.println("Se guardo...");
         }
 
+    }
+
+    private static void modificarVenta() {
+        System.out.println("MODIFICAR VENTA");
+        System.out.print("Ingrese el ID de la venta que desea modificar: ");
+        int idVenta = scanner.nextInt();
+        Venta venta = dao.readByID(idVenta);
+        if (venta != null) {
+            System.out.print("Ingrese el nuevo nombre del cliente: ");
+            venta.setCliente(scanner.next());
+
+            System.out.print("Ingrese la nueva fecha de la venta (yyyy-mm-dd): ");
+            Date fechaVenta = java.sql.Date.valueOf(scanner.next());
+            venta.setFechaventa((java.sql.Date) fechaVenta);
+
+            System.out.print("Ingrese el nuevo total de la venta: ");
+            venta.setTotal(scanner.nextDouble());
+
+            boolean resultado = dao.update(venta);
+            if (resultado) {
+                System.out.println("La venta ha sido modificada con éxito.");
+            } else {
+                System.out.println("Error al modificar la venta.");
+            }
+        } else {
+            System.out.println("No se encontró ninguna venta con ese ID.");
+        }
+    }
+
+    private static void buscarVenta() {
+        System.out.println("BUSCAR VENTA");
+        System.out.print("Ingrese el ID de la venta a buscar: ");
+        int idVenta = scanner.nextInt();
+        Venta ventaEncontrada = dao.readByID(idVenta);
+        if (ventaEncontrada != null) {
+            System.out.println("Venta encontrada:");
+            System.out.println("ID: " + ventaEncontrada.getIdventa());
+            System.out.println("Cliente: " + ventaEncontrada.getCliente());
+            System.out.println("Fecha de Venta: " + ventaEncontrada.getFechaventa());
+            System.out.println("Total: " + ventaEncontrada.getTotal());
+
+            if (!ventaEncontrada.getDetalleVenta().isEmpty()) {
+                System.out.println("Detalle de Venta:");
+                for (DetalleVenta detalle : ventaEncontrada.getDetalleVenta()) {
+                    System.out.println("Producto: " + detalle.getProducto());
+                    System.out.println("Cantidad: " + detalle.getCantidad());
+                    System.out.println("Precio: " + detalle.getPrecio());
+                }
+            } else {
+                System.out.println("No hay detalles de venta para esta venta.");
+            }
+        } else {
+            System.out.println("Venta no encontrada.");
+        }
     }
 }

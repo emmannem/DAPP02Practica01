@@ -35,7 +35,7 @@ public class Venta {
     private double total;
 
     //@OneToMany(mappedBy = "venta")
-    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "venta", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleVenta> detalleVenta;
 
     public Venta() {

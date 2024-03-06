@@ -19,7 +19,7 @@ public interface IDAO<T> {
 
     public boolean delete(T p);
 
-    public T readByID(int id);
+    public T readByID(long id);
 
     public List<T> readAll();
 }
