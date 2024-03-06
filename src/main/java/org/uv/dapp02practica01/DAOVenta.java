@@ -25,17 +25,16 @@ public class DAOVenta implements IDAO<Venta> {
         try {
             tran = session.beginTransaction();
             session.save(p);
-
             for (DetalleVenta det : p.getDetalleVenta()) {
 
                 det.setVenta(p);
                 session.save(det);
             }
-
             tran.commit();
             System.out.println("Se guardó la venta con el ID: " + p.getIdventa());
             return true;
         } catch (Exception ex) {
+            tran.rollback();
             Logger.getLogger(DAOVenta.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }

@@ -98,6 +98,7 @@ public class DAPP02Practica01 {
             double precio = scanner.nextDouble();
             detalle.setPrecio(precio);
 
+            detalle.setVenta(venta);
             venta.getDetalleVenta().add(detalle);
 
             System.out.print("¿Desea agregar otro detalle de venta? (S/N): ");
