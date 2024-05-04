@@ -207,10 +207,9 @@ public class DAPP02Practica01 {
                 System.out.println("Fecha de Venta: " + venta.getFechaventa());
                 System.out.println("Total: " + venta.getTotal());
 
-                List<DetalleVenta> detalles = venta.getDetalleVenta();
-                if (detalles != null && !detalles.isEmpty()) {
+                if (!venta.getDetalleVenta().isEmpty()) {
                     System.out.println("Detalle de Venta:");
-                    for (DetalleVenta detalle : detalles) {
+                    for (DetalleVenta detalle : venta.getDetalleVenta()) {
                         System.out.println("Producto: " + detalle.getProducto());
                         System.out.println("Cantidad: " + detalle.getCantidad());
                         System.out.println("Precio: " + detalle.getPrecio());

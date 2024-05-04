@@ -27,7 +27,6 @@ public class DAOVenta implements IDAO<Venta> {
             session.save(p);
             for (DetalleVenta det : p.getDetalleVenta()) {
 
-                det.setVenta(p);
                 session.save(det);
             }
             tran.commit();
@@ -97,9 +96,7 @@ public class DAOVenta implements IDAO<Venta> {
         Venta venta = null;
         try {
             tran = session.beginTransaction();
-            venta
-                    = session.get(Venta.class,
-                            id);
+            venta = session.get(Venta.class, id);
             tran.commit();
         } catch (Exception ex) {
             if (tran != null) {
@@ -120,7 +117,7 @@ public class DAOVenta implements IDAO<Venta> {
         List<Venta> ventas = null;
         try {
             tran = session.beginTransaction();
-            ventas = session.createQuery("FROM Venta").getResultList();
+            ventas = session.createQuery("FROM Venta", Venta.class).list();
             tran.commit();
         } catch (Exception ex) {
             if (tran != null) {
